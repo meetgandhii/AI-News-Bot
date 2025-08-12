@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Secure WhatsApp bot with web interface, mailing list, and AI-powered tech news summaries",
   "main": "index.js",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
+  },
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
