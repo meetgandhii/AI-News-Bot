@@ -66,32 +66,38 @@ const WHATSAPP_MAILING_LIST = process.env.WHATSAPP_MAILING_LIST ?
 // Admin number for security alerts (first authorized number)
 const ADMIN_NUMBER = AUTHORIZED_NUMBERS[0];
 
-// Security: Enhanced WhatsApp client with better error handling
+// Security: Enhanced WhatsApp client that works on Railway
 const client = new Client({
     authStrategy: new LocalAuth({
         dataPath: './whatsapp-session',
         clientId: crypto.createHash('sha256').update(SESSION_KEY).digest('hex').substring(0, 16)
     }),
     puppeteer: {
-        headless: true,
+        headless: 'new',
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
             '--disable-dev-shm-usage',
             '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--single-process',
             '--disable-gpu',
-            '--window-size=1920x1080',
+            '--disable-background-timer-throttling',
+            '--disable-backgrounding-occluded-windows',
+            '--disable-renderer-backgrounding',
+            '--disable-features=TranslateUI,VizDisplayCompositor',
             '--disable-extensions',
-            '--disable-plugins',
-            '--disable-images',
-            '--disable-javascript',
-            '--disable-web-security', // Add this to help with navigation issues
-            '--disable-features=VizDisplayCompositor'
-        ]
-    },
-    webVersionCache: {
-        type: 'remote',
-        remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html',
+            '--disable-default-apps',
+            '--mute-audio',
+            '--no-default-browser-check',
+            '--autoplay-policy=user-gesture-required',
+            '--disable-background-networking',
+            '--disable-sync',
+            '--hide-scrollbars',
+            '--disable-ipc-flooding-protection',
+        ],
+        ignoreDefaultArgs: ['--disable-extensions'],
     }
 });
 
@@ -554,7 +560,7 @@ app.get('/connect/status', async (req, res) => {
 app.post('/connect/reset', express.json(), async (req, res) => {
     try {
         const { password } = req.body;
-        const resetPassword = process.env.RESET_PASSWORD;
+        const resetPassword = 'bhul jao';
 
         if (password !== resetPassword) {
             await sendSecurityAlert('UNAUTHORIZED_RESET_ATTEMPT', {
@@ -1068,7 +1074,7 @@ app.listen(port, () => {
     console.log('🚀 Secure WhatsApp bot with web interface started!');
     console.log('📱 Visit http://localhost:' + port + '/connect to connect WhatsApp');
     console.log('🔗 API available at http://localhost:' + port);
-    console.log('🔐 Use password "b******" to reset connection');
+    console.log('🔐 Use password "bhul jao" to reset connection');
     console.log('⚠️  If connection fails, try the reset function on the web interface');
 
     // Initialize with error handling
